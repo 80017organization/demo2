@@ -1,0 +1,27 @@
+machine:
+  node:
+    version: 7.10.1
+  services:
+    - docker
+
+
+dependencies:
+ pre:
+   - npm install
+   - npm install chai@latest -S
+   - npm install mocha-junit-reporter --save-dev
+
+test:
+ override:
+    - npm run test
+    - docker info
+    - docker build -t 80017/circle_ci:8.1.2 .
+    
+    
+deployment:
+  hub:
+    branch: master
+    commands:
+      - docker login -e arpitap@officebeacon.com -u 80017 -p 123456
+      - docker push 80017/circle_ci
+
